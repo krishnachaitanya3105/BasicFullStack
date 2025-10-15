@@ -10,35 +10,31 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - mysql-data:/var/lib/mysql 
-    networks:
-      - springboot-mysql-net  # volume added here
+      - mysql-data:/var/lib/mysql   # volume added here
 
   backend:
     image: krishnachaitanya3105/docker-backend-practice:latest
     container_name: springboot
+    build:
+      context: ./Backend
+      dockerfile: ../MUSICAPI-FULLSTACK/backend.Dockerfile
     ports:
       - "2025:2000"
     depends_on:
       - mysqldb
     restart: on-failure
-    networks:
-      - springboot-mysql-net
 
   frontend:
     image: krishnachaitanya3105/docker-frontend-practice:latest
     container_name: react
+    build:
+      context: ./Frontend
+      dockerfile: ../MUSICAPI-FULLSTACK/frontend.Dockerfile
     ports:
       - "3000:80"
     depends_on:
       - backend
-    restart: on-failure
-    networks:
-      - springboot-mysql-net
 
 # Declare volumes at the bottom
 volumes:
   mysql-data:
-
-networks:
-  springboot-mysql-net:
